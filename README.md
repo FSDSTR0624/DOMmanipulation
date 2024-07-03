@@ -28,7 +28,7 @@ En el caso anterior usamos `style.background` para cambiar el color de fondo del
 - `offsetWidth` – ancho del nodo (en píxeles).
 - …, etc.
 
-## Un ejemplo del DOM
+## Un ejemplo del DOM
 
 Comencemos con un documento simple:
 
@@ -140,7 +140,7 @@ La estructura del DOM será:
 </table>
 ```
 
-## Otros tipos de nodos
+## Otros tipos de nodos
 
 Existen otros tipos de nodos además de elementos y nodos de texto.
 
@@ -173,9 +173,9 @@ Hay [12 tipos de nodos](https://www.w3schools.com/jsref/prop_node_nodetype.asp).
 - `nodos de texto` – contienen texto.
 - `comentarios` – Podríamos colocar información allí. No se mostrará, pero JS puede leerla desde el DOM.
 
-## Buscar: getElement*, querySelector*
+## Buscar: getElement*, querySelector*
 
-### document.getElementById o sólo id
+### document.getElementById o sólo id
 
 Si un elemento tiene el atributo `id`, podemos obtener el elemento usando el método `document.getElementById(id)`, sin importar dónde se encuentre.
 
@@ -195,10 +195,12 @@ Por ejemplo:
 </script>
 ```
 
-> [!TIP] > **El id debe ser único**  
+> [!TIP]
+> **El id debe ser único**  
 > El id debe ser único. Sólo puede haber en todo el documento un elemento con un id determinado.
 
-> [!WARNING] > **Sólo `document.getElementById`, no `anyElem.getElementById`**  
+> [!WARNING]
+> **Sólo `document.getElementById`, no `anyElem.getElementById`**  
 > El método getElementById sólo puede ser llamado en el objeto document. Busca el id dado en todo el documento.
 
 ### querySelectorAll
@@ -228,7 +230,8 @@ Aquí buscamos todos los elementos `<li>` que son los últimos hijos:
 
 Este método es muy poderoso, porque se puede utilizar cualquier selector de CSS.
 
-> [!NOTE] > **También se pueden usar pseudoclases**  
+> [!NOTE]
+> **También se pueden usar pseudoclases**  
 > Las pseudoclases como `:hover` (cuando el cursor sobrevuela el elemento) y `:active` (cuando hace clic con el botón principal) también son soportadas. Por ejemplo, `document.querySelectorAll(':hover')` devolverá una colección de elementos sobre los que el puntero hace hover en ese momento (en orden de anidación: desde el más exterior `<html>` hasta el más anidado).
 
 ### querySelector
@@ -261,7 +264,7 @@ Por ejemplo:
 </script>
 ```
 
-### closest
+### closest
 
 Los ancestros de un elemento son: el padre, el padre del padre, su padre y así sucesivamente. Todos los ancestros juntos forman la cadena de padres desde el elemento hasta la cima.
 
@@ -291,7 +294,7 @@ Por ejemplo:
 </script>
 ```
 
-### getElementsBy\*
+### getElementsBy\*
 
 También hay otros métodos que permiten buscar nodos por una etiqueta, una clase, etc.
 
@@ -329,11 +332,13 @@ Por ejemplo:
 </script>
 ```
 
-> [!WARNING] > **¡No olvides la letra "s"!**  
+> [!WARNING]
+> **¡No olvides la letra "s"!**  
 > Los desarrolladores novatos a veces olvidan la letra "s". Esto es, intentan llamar a getElementByTagName en vez de a getElementsByTagName.
 > La letra "s" no se encuentra en getElementById porque devuelve sólo un elemento. But getElementsByTagName devuelve una colección de elementos, de ahí que tenga la "s".
 
-> [!WARNING] > **¡Devuelve una colección, no un elemento!**  
+> [!WARNING]
+> **¡Devuelve una colección, no un elemento!**  
 > Otro error muy extendido entre los desarrolladores novatos es escribir:
 >
 > ```javascript
@@ -448,10 +453,11 @@ Podemos intentar insertar HTML no válido, el navegador corregirá nuestros erro
 </body>
 ```
 
-> [!NOTE] > **Los scripts no se ejecutan**  
+> [!NOTE]
+> **Los scripts no se ejecutan**  
 > Si innerHTML inserta una etiqueta `<script>` en el documento, se convierte en parte de HTML, pero no se ejecuta.
 
-## outerHTML: HTML completo del elemento
+## outerHTML: HTML completo del elemento
 
 La propiedad `outerHTML` contiene el HTML completo del elemento. Eso es como `innerHTML` más el elemento en sí.
 
@@ -597,7 +603,7 @@ Así es como se verá:
 
 Eso fue el ejemplo HTML. Ahora creemos el mismo `div` con JavaScript (asumiendo que los estilos ya están en HTML/CSS).
 
-#### Creando un elemento
+#### Creando un elemento
 
 Para crear nodos DOM, hay dos métodos:
 
@@ -711,7 +717,7 @@ before
 after
 ```
 
-### Eliminación de nodos
+### Eliminación de nodos
 
 Para quitar un nodo, tenemos el método node.remove().
 
@@ -739,7 +745,7 @@ Hagamos que nuestro mensaje desaparezca después de un segundo:
 </script>
 ```
 
-### Clonando nodos: cloneNode
+### Clonando nodos: cloneNode
 
 ¿Cómo insertar un mensaje similar más?
 
@@ -773,7 +779,7 @@ Un ejemplo de copia del mensaje:
 </script>
 ```
 
-### Resumen de modificar el documento
+### Resumen de modificar el documento
 
 - Métodos para crear nuevos nodos:
   - `document.createElement(tag)` – crea un elemento con la etiqueta HTML dada

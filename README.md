@@ -195,11 +195,15 @@ Por ejemplo:
 </script>
 ```
 
-> [!TIP] > **El id debe ser único**  
+<!-- prettier-ignore-start -->
+> [!TIP] 
+> **El id debe ser único**  
 > El id debe ser único. Sólo puede haber en todo el documento un elemento con un id determinado.
 
-> [!WARNING] > **Sólo `document.getElementById`, no `anyElem.getElementById`**  
+> [!WARNING] 
+> **Sólo `document.getElementById`, no `anyElem.getElementById`**  
 > El método getElementById sólo puede ser llamado en el objeto document. Busca el id dado en todo el documento.
+<!-- prettier-ignore-end -->
 
 ### querySelectorAll
 
@@ -228,8 +232,11 @@ Aquí buscamos todos los elementos `<li>` que son los últimos hijos:
 
 Este método es muy poderoso, porque se puede utilizar cualquier selector de CSS.
 
-> [!NOTE] > **También se pueden usar pseudoclases**  
+<!-- prettier-ignore-start -->
+> [!NOTE] 
+> **También se pueden usar pseudoclases**  
 > Las pseudoclases como `:hover` (cuando el cursor sobrevuela el elemento) y `:active` (cuando hace clic con el botón principal) también son soportadas. Por ejemplo, `document.querySelectorAll(':hover')` devolverá una colección de elementos sobre los que el puntero hace hover en ese momento (en orden de anidación: desde el más exterior `<html>` hasta el más anidado).
+<!-- prettier-ignore-end -->
 
 ### querySelector
 
@@ -329,11 +336,14 @@ Por ejemplo:
 </script>
 ```
 
-> [!WARNING] > **¡No olvides la letra "s"!**  
+<!-- prettier-ignore-start -->
+> [!WARNING] 
+> **¡No olvides la letra "s"!**  
 > Los desarrolladores novatos a veces olvidan la letra "s". Esto es, intentan llamar a getElementByTagName en vez de a getElementsByTagName.
 > La letra "s" no se encuentra en getElementById porque devuelve sólo un elemento. But getElementsByTagName devuelve una colección de elementos, de ahí que tenga la "s".
 
-> [!WARNING] > **¡Devuelve una colección, no un elemento!**  
+> [!WARNING] 
+> **¡Devuelve una colección, no un elemento!**  
 > Otro error muy extendido entre los desarrolladores novatos es escribir:
 >
 > ```javascript
@@ -348,6 +358,7 @@ Por ejemplo:
 > // debería funcionar (si hay un input)
 > document.getElementsByTagName("input")[0].value = 5;
 > ```
+<!-- prettier-ignore-end -->
 
 ### Colecciones vivas
 
@@ -448,8 +459,11 @@ Podemos intentar insertar HTML no válido, el navegador corregirá nuestros erro
 </body>
 ```
 
-> [!NOTE] > **Los scripts no se ejecutan**  
+<!-- prettier-ignore-start -->
+> [!NOTE] 
+> **Los scripts no se ejecutan**  
 > Si innerHTML inserta una etiqueta `<script>` en el documento, se convierte en parte de HTML, pero no se ejecuta.
+<!-- prettier-ignore-end -->
 
 ## outerHTML: HTML completo del elemento
 
@@ -887,15 +901,16 @@ Por ejemplo:
 document.body.style.backgroundColor = prompt("background color?", "green");
 ```
 
-> [!TIP] > **Propiedades prefijadas**  
+<!-- prettier-ignore-start -->
+> [!TIP] 
+> **Propiedades prefijadas**  
 > Propiedades con prefijos del navegador como `-moz-border-radius`, `-webkit-border-radius` también siguen la misma regla: un guion significa mayúscula.
-
-Por ejemplo:
-
-```javascript
-MozBorderRadius = "5px";
-button.style.WebkitBorderRadius = "5px";
-```
+> Por ejemplo:
+> ```javascript
+> MozBorderRadius = "5px";
+> button.style.WebkitBorderRadius = "5px";
+> ```
+<!-- prettier-ignore-end -->
 
 ### Reseteando la propiedad style
 
@@ -1105,8 +1120,10 @@ Para eliminar el handler, usa `removeEventListener`:
 element.removeEventListener(event, handler, [options]);
 ```
 
+<!-- prettier-ignore-start -->
+
 > [!WARNING]
-> Remover requiere la misma función
+> Eliminar requiere la misma función
 > Para remover un handler deberemos pasar exactamente la misma función que asignamos.
 > Esto no funciona:
 >
@@ -1129,7 +1146,8 @@ element.removeEventListener(event, handler, [options]);
 > input.removeEventListener("click", handler);
 > ```
 >
-> Por favor nota que si no almacenamos la función en una variable entonces no podremos removerla. No hay forma de “volver a leer” los handlers asignados por addEventListener.
+> Nota que si no almacenamos la función en una variable entonces no podremos removerla. No hay forma de “volver a leer” los handlers asignados por addEventListener.
+<!-- prettier-ignore-end -->
 
 Múltiples llamadas a addEventListenerpermiten agregar múltiples handlers:
 

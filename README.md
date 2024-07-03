@@ -17,9 +17,6 @@ Ejecutar el siguiente código hará que el `<body>` sea de color rojo
 ```javascript
 // cambiar el color de fondo a rojo
 document.body.style.background = "red";
-
-// deshacer el cambio después de 1 segundo
-setTimeout(() => (document.body.style.background = ""), 1000);
 ```
 
 En el caso anterior usamos `style.background` para cambiar el color de fondo del `document.body`, pero existen muchas otras propiedades, tales como:

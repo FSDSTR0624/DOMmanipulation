@@ -195,12 +195,10 @@ Por ejemplo:
 </script>
 ```
 
-> [!TIP]
-> **El id debe ser único**  
+> [!TIP] > **El id debe ser único**  
 > El id debe ser único. Sólo puede haber en todo el documento un elemento con un id determinado.
 
-> [!WARNING]
-> **Sólo `document.getElementById`, no `anyElem.getElementById`**  
+> [!WARNING] > **Sólo `document.getElementById`, no `anyElem.getElementById`**  
 > El método getElementById sólo puede ser llamado en el objeto document. Busca el id dado en todo el documento.
 
 ### querySelectorAll
@@ -230,8 +228,7 @@ Aquí buscamos todos los elementos `<li>` que son los últimos hijos:
 
 Este método es muy poderoso, porque se puede utilizar cualquier selector de CSS.
 
-> [!NOTE]
-> **También se pueden usar pseudoclases**  
+> [!NOTE] > **También se pueden usar pseudoclases**  
 > Las pseudoclases como `:hover` (cuando el cursor sobrevuela el elemento) y `:active` (cuando hace clic con el botón principal) también son soportadas. Por ejemplo, `document.querySelectorAll(':hover')` devolverá una colección de elementos sobre los que el puntero hace hover en ese momento (en orden de anidación: desde el más exterior `<html>` hasta el más anidado).
 
 ### querySelector
@@ -332,13 +329,11 @@ Por ejemplo:
 </script>
 ```
 
-> [!WARNING]
-> **¡No olvides la letra "s"!**  
+> [!WARNING] > **¡No olvides la letra "s"!**  
 > Los desarrolladores novatos a veces olvidan la letra "s". Esto es, intentan llamar a getElementByTagName en vez de a getElementsByTagName.
 > La letra "s" no se encuentra en getElementById porque devuelve sólo un elemento. But getElementsByTagName devuelve una colección de elementos, de ahí que tenga la "s".
 
-> [!WARNING]
-> **¡Devuelve una colección, no un elemento!**  
+> [!WARNING] > **¡Devuelve una colección, no un elemento!**  
 > Otro error muy extendido entre los desarrolladores novatos es escribir:
 >
 > ```javascript
@@ -453,8 +448,7 @@ Podemos intentar insertar HTML no válido, el navegador corregirá nuestros erro
 </body>
 ```
 
-> [!NOTE]
-> **Los scripts no se ejecutan**  
+> [!NOTE] > **Los scripts no se ejecutan**  
 > Si innerHTML inserta una etiqueta `<script>` en el documento, se convierte en parte de HTML, pero no se ejecuta.
 
 ## outerHTML: HTML completo del elemento
@@ -792,3 +786,442 @@ Un ejemplo de copia del mensaje:
   - `node.after(...nodes or strings)` –- inserta inmediatamente después de node
   - `node.replaceWith(...nodes or strings)` –- reemplaza node
   - `node.remove()` –- quita el node.
+
+## Estilos y clases
+
+Antes de profundizar en cómo JavaScript maneja las clases y los estilos, hay una regla importante. Aunque es lo suficientemente obvio, aún tenemos que mencionarlo.
+
+Por lo general, hay dos formas de dar estilo a un elemento:
+
+- Crear una clase `css` y agregarla: `<div class="...">`
+- Escribir las propiedades directamente en style: `<div style="...">`.
+
+JavaScript puede modificar ambos, clases y las propiedades de style.
+
+Nosotros deberíamos preferir las clases `css` en lugar de `style`. Este último solo debe usarse si las clases “no pueden manejarlo”.
+
+Por ejemplo, `style` es aceptable si nosotros calculamos las coordenadas de un elemento dinámicamente y queremos establecer estas desde JavaScript, así:
+
+```javascript
+let top = /* cálculos complejos */;
+let left = /* cálculos complejos */;
+
+elem.style.left = left; // ej. '123px', calculado en tiempo de ejecución
+elem.style.top = top; // ej. '456px'
+```
+
+Para otros casos como convertir un texto en rojo, agregar un icono de fondo. Escribir eso en CSS y luego agregar la clase (JavaScript puede hacer eso), es más flexible y más fácil de mantener.
+
+### className y classList
+
+Cambiar una clase es una de las acciones más utilizadas.
+
+En la antigüedad, había una limitación en JavaScript: una palabra reservada como `"class"` no podía ser una propiedad de un objeto. Esa limitación no existe ahora, pero en ese momento era imposible tener una propiedad `"class"`, como `elem.class`.
+
+Entonces para clases de similares propiedades, `"className"` fue introducido: el `elem.className` corresponde al atributo `"class"`.
+
+Por ejemplo:
+
+```html
+<body class="main page">
+  <script>
+    alert(document.body.className); // página principal
+  </script>
+</body>
+```
+
+Si asignamos algo a `elem.className`, reemplaza toda la cadena de clases. A veces es lo que necesitamos, pero a menudo queremos agregar o eliminar una sola clase.
+
+Hay otra propiedad para eso: `elem.classList`.
+
+El `elem.classList` es un objeto especial con métodos para agregar, eliminar y alternar (`add/remove/toggle`) una sola clase.
+
+Por ejemplo:
+
+```html
+<body class="main page">
+  <script>
+    // agregar una clase
+    document.body.classList.add("article");
+
+    alert(document.body.className); // clase "article" de la página principal
+  </script>
+</body>
+```
+
+Entonces podemos trabajar con ambos: todas las clases como una cadena usando `className` o con clases individuales usando `classList`. Lo que elijamos depende de nuestras necesidades.
+
+Métodos de `classList`:
+
+- `elem.classList.add/remove("class")` – agrega o remueve la clase.
+- `elem.classList.toggle("class")` – agrega la clase si no existe, si no la remueve.
+- `elem.classList.contains("class")` – verifica si tiene la clase dada, devuelve `true`/`false`.
+
+Además, `classList` es iterable, entonces podemos listar todas las clases con `for..of`, así:
+
+```html
+<body class="main page">
+  <script>
+    for (let name of document.body.classList) {
+      alert(name); // main y luego page
+    }
+  </script>
+</body>
+```
+
+### style de un elemento
+
+La propiedad `elem.style` es un objeto que corresponde a lo escrito en el atributo `"style"`. Establecer `elem.style.width="100px"` funciona igual que sí tuviéramos en el atributo style una cadena con `width:100px`.
+
+Para propiedades de varias palabras se usa `camelCase`:
+
+```
+background-color  => elem.style.backgroundColor
+z-index           => elem.style.zIndex
+border-left-width => elem.style.borderLeftWidth
+```
+
+Por ejemplo:
+
+```javascript
+document.body.style.backgroundColor = prompt("background color?", "green");
+```
+
+> [!TIP] > **Propiedades prefijadas**  
+> Propiedades con prefijos del navegador como `-moz-border-radius`, `-webkit-border-radius` también siguen la misma regla: un guion significa mayúscula.
+
+Por ejemplo:
+
+```javascript
+MozBorderRadius = "5px";
+button.style.WebkitBorderRadius = "5px";
+```
+
+### Reseteando la propiedad style
+
+Si establecemos style.display como una cadena vacía, entonces el navegador aplica clases y estilos CSS incorporados normalmente por el navegador, como si no existiera tal style.display.
+
+También hay un método especial para eso, elem.style.removeProperty('style property'). Así, podemos quitar una propiedad:
+
+```javascript
+document.body.style.background = "red"; //establece background a rojo
+
+setTimeout(() => document.body.style.removeProperty("background"), 1000); // quitar background después de 1 segundo
+```
+
+## Introducción a los eventos en el navegador
+
+Un `evento` es una señal de que algo ocurrió. Todos los nodos del DOM generan dichas señales (pero los eventos no están limitados sólo al DOM).
+
+Aquí hay una lista con los eventos del DOM más utilizados, solo para echar un vistazo:
+
+**Eventos del mouse:**
+
+- `click` – cuando el mouse hace click sobre un elemento (los dispositivos touch lo generan con un toque).
+- `contextmenu` – cuando el mouse hace click derecho sobre un elemento.
+- `mouseover` / `mouseout` – cuando el cursor del mouse ingresa/abandona un elemento.
+- `mousedown` / `mouseup` – cuando el botón del mouse es presionado/soltado sobre un elemento.
+- `mousemove` – cuando el mouse se mueve.
+
+**Eventos del teclado:**
+
+- `keydown` / `keyup` – cuando se presiona/suelta una tecla.
+
+**Eventos del elemento form:**
+
+- `submit` – cuando el visitante envía un <form>.
+- `focus` – cuando el visitante hace foco en un elemento, por ejemplo un <input>.
+
+**Eventos del documento:**
+
+- `DOMContentLoaded` --cuando el HTML es cargado y procesado, el DOM está completamente construido
+
+**Eventos del CSS:**
+
+- `transitionend` – cuando una animación CSS concluye.
+
+### Controladores de eventos
+
+Para reaccionar a los eventos podemos asignar un `handler` (controlador) el cual es una función que se ejecuta en caso de un evento.
+
+Los handlers son una forma de ejecutar código JavaScript en caso de acciones por parte del usuario.
+
+Hay muchas maneras de asignar un `handler`. Vamos a verlas empezando por las más simples.
+
+#### Atributo HTML
+
+Un handler puede ser establecido en el HTML con un atributo llamado `on<event>`.
+
+Por ejemplo, para asignar un handler `click` a un `input` podemos usar `onclick`, como aquí:
+
+```html
+<input value="Haz click aquí" onclick="alert('¡Click!')" type="button" />
+```
+
+Al hacer click, el código dentro de `onclick` se ejecuta.
+
+Toma en cuenta que dentro de `onclick` usamos comillas simples, porque el atributo en sí va entre comillas dobles. Si olvidamos que el código está dentro del atributo y usamos comillas dobles dentro, así: `onclick="alert("Click!")"`, no funcionará correctamente.
+
+Un atributo HTML no es un lugar conveniente para escribir un montón de código, así que mejor creamos una función JavaScript y la llamamos allí.
+
+Aquí un click ejecuta la función countRabbits():
+
+```html
+<script>
+  function countRabbits() {
+    for (let i = 1; i <= 3; i++) {
+      alert("Conejo número " + i);
+    }
+  }
+</script>
+
+<input type="button" onclick="countRabbits()" value="¡Cuenta los conejos!" />
+```
+
+#### Propiedad del DOM
+
+Podemos asignar un handler usando una propiedad del DOM `on<event>`.
+
+Por ejemplo, `elem.onclick`:
+
+```html
+<input id="elem" type="button" value="Haz click en mí" />
+<script>
+  elem.onclick = function () {
+    alert("¡Gracias!");
+  };
+</script>
+```
+
+#### Accediendo al elemento: this
+
+El valor de this dentro de un handler es el elemento, el cual tiene el handler dentro.
+
+En el siguiente código el button muestra su contenido usando this.innerHTML:
+
+```html
+<button onclick="alert(this.innerHTML)">Haz click en mí</button>
+```
+
+#### Posibles errores
+
+Nosotros podemos establecer una función existente como un handler:
+
+```javascript
+function sayThanks() {
+  alert("¡Gracias!");
+}
+
+elem.onclick = sayThanks;
+```
+
+Pero ten cuidado: la función debe ser asignada como `sayThanks`, no `sayThanks()`.
+
+```javascript
+// correcto
+button.onclick = sayThanks;
+
+// incorrecto
+button.onclick = sayThanks();
+```
+
+Si agregamos paréntesis, `sayThanks()` se convierte en una llamada de función. En ese caso la última linea toma el resultado de la ejecución de la función, que es `undefined` (ya que la función no devuelve nada), y lo asigna a `onclick`. Esto no funciona.
+
+Por otro lado, en el markup necesitamos los paréntesis:
+
+```html
+<input type="button" id="button" onclick="sayThanks()" />
+```
+
+La diferencia es fácil de explicar. Cuando el navegador lee el atributo crea una función handler con cuerpo a partir del contenido del atributo.
+
+Por lo que el markup genera esta propiedad:
+
+```javascript
+button.onclick = function () {
+  sayThanks(); // <-- el contenido del atributo va aquí
+};
+```
+
+No uses `setAttribute` para handlers. Tal llamada no funcionará:
+
+```javascript
+// un click sobre <body> generará errores,
+// debido a que los atributos siempre son strings, la función se convierte en un string
+document.body.setAttribute("onclick", function () {
+  alert(1);
+});
+```
+
+Las mayúsculas en las propiedades DOM importan.
+
+Asignar un handler a `elem.onclick`, en lugar de `elem.ONCLICK`, ya que las propiedades DOM son sensibles a mayúsculas.
+
+#### addEventListener
+
+El problema fundamental de las formas ya mencionadas para asignar handlers es que no podemos asignar multiples handlers a un solo evento.
+
+Digamos que una parte de nuestro código quiere resaltar un botón al hacer click, y otra quiere mostrar un mensaje en el mismo click.
+
+Nos gustaría asignar dos handlers de eventos para eso. Pero una nueva propiedad DOM sobrescribirá la que ya existe:
+
+```javascript
+input.onclick = function () {
+  alert(1);
+};
+// ...
+input.onclick = function () {
+  alert(2);
+}; //  el handler reemplaza el handler anterior
+```
+
+Los desarrolladores de estándares de la web entendieron eso hace mucho tiempo y sugirieron una forma alternativa de administrar los handlers utilizando los métodos especiales `addEventListener` y `removeEventListener`, que no tienen este problema.
+
+La sintaxis para agregar un handler:
+
+```
+element.addEventListener(event, handler, [options]);
+```
+
+`event`
+
+Nombre del evento, por ejemplo: "click".
+
+`handler`
+
+La función handler.
+
+`options`
+
+Un objeto adicional, opcional, con las propiedades:
+
+- `once`: si es `true` entonces el listener se remueve automáticamente después de activarlo.
+- `capture`: la fase en la que se controla el evento, que será cubierta en el capítulo Propagación y captura. Por razones históricas, options también puede ser `false`/`true`, lo que es igual a {capture: `false`/`true`}.
+- `passive`: si es `true` entonces el handler no llamará a `preventDefault()`
+
+Para eliminar el handler, usa `removeEventListener`:
+
+```javascript
+element.removeEventListener(event, handler, [options]);
+```
+
+> [!WARNING]
+> Remover requiere la misma función
+> Para remover un handler deberemos pasar exactamente la misma función que asignamos.
+> Esto no funciona:
+>
+> ```javascript
+> elem.addEventListener("click", () => alert("¡Gracias!"));
+> // ....
+> elem.removeEventListener("click", () => alert("¡Gracias!"));
+> ```
+>
+> El handler no será removido porque removeEventListener obtiene otra función, con el mismo código, pero eso no importa, ya que es un objeto de función diferente.
+> Aquí está la manera correcta:
+>
+> ```javascript
+> function handler() {
+>   alert("¡Gracias!");
+> }
+>
+> input.addEventListener("click", handler);
+> // ....
+> input.removeEventListener("click", handler);
+> ```
+>
+> Por favor nota que si no almacenamos la función en una variable entonces no podremos removerla. No hay forma de “volver a leer” los handlers asignados por addEventListener.
+
+Múltiples llamadas a addEventListenerpermiten agregar múltiples handlers:
+
+```html
+<input id="elem" type="button" value="Haz click en mí" />
+
+<script>
+  function handler1() {
+    alert("¡Gracias!");
+  }
+
+  function handler2() {
+    alert("¡Gracias de nuevo!");
+  }
+
+  elem.onclick = () => alert("Hola");
+  elem.addEventListener("click", handler1); // Gracias!
+  elem.addEventListener("click", handler2); // Gracias de nuevo!
+</script>
+```
+
+#### Objeto del evento
+
+Pero para manejar correctamente un evento necesitamos saber todavía más acerca de lo que está pasando. No solo si fue un “click” o un “teclazo”, sino ¿cuáles eran coordenadas del cursor, o qué tecla fue oprimida? Y así.
+
+Cuando un evento ocurre, el navegador crea un objeto del evento, coloca los detalles dentro y los pasa como un argumento al handler.
+
+Aquí hay un ejemplo para obtener las coordenadas del cursor a partir del objeto del evento:
+
+```html
+<input type="button" value="¡Haz click en mí!" id="elem" />
+
+<script>
+  elem.onclick = function (event) {
+    // muestra el tipo de evento, el elemento y las coordenadas del click
+    alert(event.type + " en el " + event.currentTarget);
+    alert("Coordenadas: " + event.clientX + ":" + event.clientY);
+  };
+</script>
+```
+
+Algunas propiedades del objeto `event`:
+
+`event.type`
+
+Tipo de evento, en este caso fue `"click"`.
+
+`event.clientX / event.clientY`
+
+Coordenadas del cursor relativas a la ventana, para eventos de cursor.
+
+`event.currentTarget`
+
+Elemento que maneja el evento. Lo que exactamente igual a this, a menos que el handler sea una arrow function o su `this` esté vinculado a otra cosa, entonces podemos obtener el elemento desde `event.currentTarget`.
+
+`event.target`
+Un manejador en un elemento padre siempre puede obtener los detalles sobre dónde realmente ocurrió el evento.
+
+El elemento anidado más profundo que causó el evento es llamado elemento objetivo, accesible como `event.target`
+
+```html
+<form id="form">
+  FORM
+  <div>
+    DIV
+    <p>P</p>
+  </div>
+</form>
+<script>
+  form.onclick = function (event) {
+    event.target.style.backgroundColor = "yellow";
+
+    // chrome needs some time to paint yellow
+    setTimeout(() => {
+      alert("target = " + event.target.tagName + ", this=" + this.tagName);
+      event.target.style.backgroundColor = "";
+    }, 0);
+  };
+</script>
+```
+
+#### Evitar las acciones del navegador
+
+Hay dos formas de decirle al navegador que no queremos que actúe:
+
+- La forma principal es utilizar el objeto `event`. Hay un método `event.preventDefault()`.
+- Si el controlador se asigna usando `on<event>` (no por `addEventListener`), entonces devolver `false` también funciona igual.
+
+En este HTML, un clic en un enlace no conduce a la navegación. El navegador no hace nada:
+
+```html
+<a href="/" onclick="return false">Haz clic aquí</a>
+o
+<a href="/" onclick="event.preventDefault()">aquí</a>
+```
